@@ -1,7 +1,13 @@
 const express = require("express");
 const app = express();
-const MongoClient = require('mongodb').MongoClient;
+const mongoose = require('mongoose');
+const bodyParser = require('body-parser');
+const cors = require('cors');
 require('dotenv/config');
+
+// middlewares
+app.use(bodyParser.json());
+app.use(cors());
 
 // default
 app.get('/', (req, res) => {
@@ -14,12 +20,9 @@ const postsRoute = require('./routes/posts');
 app.use('/posts', postsRoute);
 
 // connect mongoDB
-const uri = process.env.DB_CONNECTION;
-const client = new MongoClient(uri, { useNewUrlParser: true , useUnifiedTopology: true });
-client.connect(err => {
-  console.log('Db connected');
-  client.close();
-});
+mongoose.connect(process.env.DB_CONNECTION, 
+  { useNewUrlParser: true, useUnifiedTopology: true},
+  () => console.log('DB connected'));
 
 //listen
 app.listen(3000);
