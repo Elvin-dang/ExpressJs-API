@@ -16,8 +16,11 @@ app.get('/', (req, res) => {
 
 // import routes
 const postsRoute = require('./routes/posts');
+const authRoute = require('./routes/auth');
 
-app.use('/posts', postsRoute);
+// routes middlewares
+app.use('/api/posts', postsRoute);
+app.use('/api/user', authRoute);
 
 // connect mongoDB
 mongoose.connect(process.env.DB_CONNECTION, 
@@ -25,4 +28,4 @@ mongoose.connect(process.env.DB_CONNECTION,
   () => console.log('DB connected'));
 
 //listen
-app.listen(3000);
+app.listen(process.env.PORT || 3000);
